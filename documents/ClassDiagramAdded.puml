@@ -1,0 +1,20 @@
+@startuml ClassDiagram
+  
+    class User {
+    - userId: int
+    - userName: String
+    - password: String
+    }
+
+    class Post {
+        - postId: int
+        - createdAt: DateTime
+        - updatedAt: DateTime
+        - postTitle: String
+        - postText: String
+        - userId: int
+    }
+ 
+    User "1" --> "0..*" Post : make
+
+@enduml
