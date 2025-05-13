@@ -1,4 +1,5 @@
 {
     "plantuml.exportFormat": "png",
     "plantuml.render": "Local",
+    "java.configuration.updateBuildConfiguration": "interactive",
 }

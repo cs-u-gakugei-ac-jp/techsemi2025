@@ -18,12 +18,12 @@ services:
       context: ./containers/db
     restart: always
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_DATABASE: miyablog_db
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - mysql:/var/lib/mysql
     ports:
-      - ${DB_PORT}:3306
+      - 3306:3306
 
   gradle:
     build:
