@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.15' // mysql8系
     implementation group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: '1.2'
+    implementation 'com.zaxxer:HikariCP:3.4.5' // Java 8互換のバージョン
 
     runtimeOnly group: 'org.glassfish.web', name: 'jstl-impl', version: '1.2'
     runtimeOnly "mysql:mysql-connector-java:8.0.15"
