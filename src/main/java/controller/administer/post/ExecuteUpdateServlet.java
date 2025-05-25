@@ -1,27 +1,27 @@
 package controller.administer.post;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException; // IOExceptionのインポート
+import javax.servlet.ServletException; // サーブレット例外のインポート
+import javax.servlet.annotation.WebServlet; // WebServletアノテーションのインポート
+import javax.servlet.http.HttpServlet; // HttpServletクラスのインポート
+import javax.servlet.http.HttpServletRequest; // HttpServletRequestのインポート
+import javax.servlet.http.HttpServletResponse; // HttpServletResponseのインポート
+import javax.servlet.http.HttpSession; // HttpSessionのインポート
 
-import dao.PostsDao;
-import entity.Post;
-import java.time.LocalDateTime;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import dao.PostsDao; // PostsDaoのインポート
+import entity.Post; // Postエンティティのインポート
+import java.time.LocalDateTime; // LocalDateTimeのインポート
+import java.net.URLEncoder; // URLEncoderのインポート
+import java.nio.charset.StandardCharsets; // StandardCharsetsのインポート
 
-@WebServlet("/administer/post/execute-update")
+@WebServlet("/administer/post/execute-update") // このサーブレットのURLマッピング
 public class ExecuteUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect(request.getContextPath() + "/administer/account/login");
+        HttpSession session = request.getSession(false); // 既存のセッションを取得（なければnull）
+        if (session == null || session.getAttribute("userId") == null) { // セッションまたはuserId属性がなければ
+            response.sendRedirect(request.getContextPath() + "/administer/account/login"); // ログイン画面へリダイレクト
             return;
         }
 
@@ -42,12 +42,12 @@ public class ExecuteUpdateServlet extends HttpServlet {
                 String successMessage = URLEncoder.encode("投稿の更新が完了しました。", StandardCharsets.UTF_8.toString());
                 response.sendRedirect("/administer/post/home?message=" + successMessage);
             } else {
-                String errorMessage = URLEncoder.encode("指定された投稿が見つかりませんでした。", StandardCharsets.UTF_8.toString());
-                response.sendRedirect("/administer/post/home?error=" + errorMessage);
+                String error = URLEncoder.encode("指定された投稿が見つかりませんでした。", StandardCharsets.UTF_8.toString());
+                response.sendRedirect("/administer/post/home?error=" + error);
             }
         } catch (Exception e) {
-            String exceptionMessage = URLEncoder.encode("投稿情報の更新中にエラーが発生しました。", StandardCharsets.UTF_8.toString());
-            response.sendRedirect("/administer/post/home?error=" + exceptionMessage);
+            String error = URLEncoder.encode("投稿情報の更新中にエラーが発生しました。", StandardCharsets.UTF_8.toString());
+            response.sendRedirect("/administer/post/home?error=" + error);
         }
     }
 }

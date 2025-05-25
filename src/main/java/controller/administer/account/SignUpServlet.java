@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/administer/account/sign-up")
+@WebServlet("/administer/account/sign-up") // このサーブレットのURLマッピング
 public class SignUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/account/sign-up.jsp");
-        dispatcher.forward(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/account/sign-up.jsp"); // サインアップ画面のJSPへのディスパッチャ取得
+        dispatcher.forward(request, response); // JSPへフォワード
     }
 }

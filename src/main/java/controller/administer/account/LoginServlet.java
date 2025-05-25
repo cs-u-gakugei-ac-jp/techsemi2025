@@ -1,25 +1,25 @@
 package controller.administer.account;
 
-import java.io.IOException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.io.IOException; // IOExceptionのインポート
+import javax.servlet.RequestDispatcher; // RequestDispatcherのインポート
+import javax.servlet.ServletException; // サーブレット例外のインポート
+import javax.servlet.annotation.WebServlet; // WebServletアノテーションのインポート
+import javax.servlet.http.HttpServlet; // HttpServletクラスのインポート
+import javax.servlet.http.HttpServletRequest; // HttpServletRequestのインポート
+import javax.servlet.http.HttpServletResponse; // HttpServletResponseのインポート
 
-@WebServlet("/administer/account/login")
+@WebServlet("/administer/account/login") // このサーブレットのURLマッピング
 public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // メッセージの取得
-        String message = request.getParameter("message");
-        if (message != null && !message.isEmpty()) {
-            request.setAttribute("message", message);
+        String message = request.getParameter("message"); // リクエストパラメータから"message"を取得
+        if (message != null && !message.isEmpty()) { // messageが存在し空でない場合
+            request.setAttribute("message", message); // リクエスト属性に"message"をセット
         }
 
         // ログイン画面へのフォワード
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/account/login.jsp");
-        dispatcher.forward(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/account/login.jsp"); // ログイン画面のJSPへのディスパッチャ取得
+        dispatcher.forward(request, response); // JSPへフォワード
     }
 }

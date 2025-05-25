@@ -15,7 +15,7 @@ CREATE TABLE users (
 );
 
 -- デフォルトユーザーの挿入
-INSERT INTO users (user_name, password) VALUES ('admin', 'password123');
+INSERT INTO users (user_id, user_name, password) VALUES (1, 'admin', 'password123');
 
 -- posts テーブルの作成
 CREATE TABLE posts (

@@ -1,28 +1,28 @@
 package controller.administer.post;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.io.IOException; // IOExceptionのインポート
+import java.net.URLEncoder; // URLEncoderのインポート
+import java.nio.charset.StandardCharsets; // StandardCharsetsのインポート
+import javax.servlet.ServletException; // サーブレット例外のインポート
+import javax.servlet.annotation.WebServlet; // WebServletアノテーションのインポート
+import javax.servlet.http.HttpServlet; // HttpServletクラスのインポート
+import javax.servlet.http.HttpServletRequest; // HttpServletRequestのインポート
+import javax.servlet.http.HttpServletResponse; // HttpServletResponseのインポート
+import javax.servlet.http.HttpSession; // HttpSessionのインポート
 
-import dao.PostsDao;
-import dao.DaoException;
+import dao.PostsDao; // PostsDaoのインポート
+import dao.DaoException; // DaoExceptionのインポート
 
-@WebServlet("/administer/post/execute-delete")
+@WebServlet("/administer/post/execute-delete") // このサーブレットのURLマッピング
 public class ExecuteDeleteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect(request.getContextPath() + "/administer/account/login");
+        HttpSession session = request.getSession(false); // 既存のセッションを取得（なければnull）
+        if (session == null || session.getAttribute("userId") == null) { // セッションまたはuserId属性がなければ
+            response.sendRedirect(request.getContextPath() + "/administer/account/login"); // ログイン画面へリダイレクト
             return;
         }
 
@@ -36,16 +36,16 @@ public class ExecuteDeleteServlet extends HttpServlet {
                     String message = URLEncoder.encode("削除が成功しました", StandardCharsets.UTF_8.toString());
                     response.sendRedirect("/administer/post/home?message=" + message);
                 } catch (DaoException e) {
-                    String message = URLEncoder.encode("削除に失敗しました", StandardCharsets.UTF_8.toString());
-                    response.sendRedirect("/administer/post/home?message=" + message);
+                    String error = URLEncoder.encode("削除に失敗しました", StandardCharsets.UTF_8.toString());
+                    response.sendRedirect("/administer/post/home?error=" + error);
                 }
             } catch (NumberFormatException e) {
-                String message = URLEncoder.encode("無効な投稿IDです", StandardCharsets.UTF_8.toString());
-                response.sendRedirect("/administer/post/home?message=" + message);
+                String error = URLEncoder.encode("無効な投稿IDです", StandardCharsets.UTF_8.toString());
+                response.sendRedirect("/administer/post/home?error=" + error);
             }
         } else {
-            String message = URLEncoder.encode("投稿IDが指定されていません", StandardCharsets.UTF_8.toString());
-            response.sendRedirect("/administer/post/home?message=" + message);
+            String error = URLEncoder.encode("投稿IDが指定されていません", StandardCharsets.UTF_8.toString());
+            response.sendRedirect("/administer/post/home?error=" + error);
         }
     }
 }
