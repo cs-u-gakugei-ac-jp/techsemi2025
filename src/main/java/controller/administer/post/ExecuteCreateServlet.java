@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse; // HttpServletResponseのイン�
 import javax.servlet.http.HttpSession; // HttpSessionのインポート
 
 import entity.Post; // Postエンティティのインポート
+import modelUtil.Failure;
 import dao.PostsDao; // PostsDaoのインポート
 import dao.DaoException; // DaoExceptionのインポート
 import java.time.LocalDateTime; // LocalDateTimeのインポート
@@ -29,7 +30,14 @@ public class ExecuteCreateServlet extends HttpServlet {
         String text = request.getParameter("text"); // リクエストからテキストを取得
         int userId = (Integer) session.getAttribute("userId"); // セッションからuserIdを取得
 
-        Post post = new Post(0, LocalDateTime.now(), null, title, text, userId); // 新しい投稿オブジェクトを作成
+        Post post = null;
+        try {
+            post = new Post(0, LocalDateTime.now(), null, title, text, userId); // 新しい投稿オブジェクトを作成
+        } catch (Failure e) {
+            String error = java.net.URLEncoder.encode("投稿オブジェクトの作成中にエラーが発生しました。", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/administer/post/home?error=" + error);
+            return;
+        }
         PostsDao postsDao = new PostsDao(); // PostsDaoのインスタンスを生成
 
         try {

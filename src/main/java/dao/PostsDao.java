@@ -32,14 +32,18 @@ public class PostsDao {
             statement.setInt(1, postId); // 投稿IDをセット
             try (ResultSet rs = statement.executeQuery()) { // SQL実行（SELECT）
                 if (rs.next()) { // 結果があれば
-                    return new Post(
-                            rs.getInt("post_id"), // 投稿ID
-                            rs.getTimestamp("created_at").toLocalDateTime(), // 作成日時
-                            rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime()
-                                    : null, // 更新日時（null許容）
-                            rs.getString("post_title"), // タイトル
-                            rs.getString("post_text"), // 本文
-                            rs.getInt("user_id")); // ユーザーID
+                    try {
+                        return new Post(
+                                rs.getInt("post_id"), // 投稿ID
+                                rs.getTimestamp("created_at").toLocalDateTime(), // 作成日時
+                                rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime()
+                                        : null, // 更新日時（null許容）
+                                rs.getString("post_title"), // タイトル
+                                rs.getString("post_text"), // 本文
+                                rs.getInt("user_id")); // ユーザーID
+                    } catch (modelUtil.Failure f) {
+                        throw new DaoException("投稿取得時にエンティティ生成エラーが発生しました。", f);
+                    }
                 }
             }
             return null; // 見つからなければnull
@@ -56,13 +60,18 @@ public class PostsDao {
                 PreparedStatement statement = connection.prepareStatement(sql); // SQL準備
                 ResultSet rs = statement.executeQuery()) { // SQL実行
             while (rs.next()) { // 1件ずつ取り出し
-                posts.add(new Post(
-                        rs.getInt("post_id"), // 投稿ID
-                        rs.getTimestamp("created_at").toLocalDateTime(), // 作成日時
-                        rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime() : null, // 更新日時
-                        rs.getString("post_title"), // タイトル
-                        rs.getString("post_text"), // 本文
-                        rs.getInt("user_id"))); // ユーザーID
+                try {
+                    posts.add(new Post(
+                            rs.getInt("post_id"), // 投稿ID
+                            rs.getTimestamp("created_at").toLocalDateTime(), // 作成日時
+                            rs.getTimestamp("updated_at") != null ? rs.getTimestamp("updated_at").toLocalDateTime()
+                                    : null, // 更新日時
+                            rs.getString("post_title"), // タイトル
+                            rs.getString("post_text"), // 本文
+                            rs.getInt("user_id"))); // ユーザーID
+                } catch (modelUtil.Failure f) {
+                    throw new DaoException("投稿一覧取得時にエンティティ生成エラーが発生しました。", f);
+                }
             }
         } catch (SQLException e) {
             throw new DaoException("投稿一覧取得時にエラーが発生しました。", e); // 例外発生時
