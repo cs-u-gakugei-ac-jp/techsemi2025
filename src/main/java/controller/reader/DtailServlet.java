@@ -1,24 +1,27 @@
 package controller.reader;
 
-import dao.PostsDao;
-import entity.Post;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import dao.PostsDao; // PostsDaoのインポート
+import entity.Post; // Postエンティティのインポート
+import javax.servlet.RequestDispatcher; // RequestDispatcherのインポート
+import javax.servlet.ServletException; // サーブレット例外のインポート
+import javax.servlet.annotation.WebServlet; // WebServletアノテーションのインポート
+import javax.servlet.http.HttpServlet; // HttpServletクラスのインポート
+import javax.servlet.http.HttpServletRequest; // HttpServletRequestのインポート
+import javax.servlet.http.HttpServletResponse; // HttpServletResponseのインポート
+import java.io.IOException; // IOExceptionのインポート
 
-@WebServlet("/detail")
+@WebServlet("/detail") // このサーブレットのURLマッピング
 public class DtailServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String postIdParam = request.getParameter("postId");
-        if (postIdParam == null || postIdParam.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "postId is required");
+        String postIdParam = request.getParameter("postId"); // リクエストから投稿IDを取得
+        if (postIdParam == null || postIdParam.isEmpty()) { // 投稿IDが指定されていない場合
+            String error = "投稿IDが指定されていません。"; // エラーメッセージをセット
+            request.setAttribute("error", error); // リクエスト属性にエラーをセット
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/detail.jsp"); // 詳細画面のJSPへのディスパッチャ取得
+            dispatcher.forward(request, response); // JSPへフォワード
             return;
         }
 
@@ -28,7 +31,10 @@ public class DtailServlet extends HttpServlet {
             Post post = postsDao.getOne(postId);
 
             if (post == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Post not found");
+                String error = "投稿が見つかりません。";
+                request.setAttribute("error", error);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/detail.jsp");
+                dispatcher.forward(request, response);
                 return;
             }
 
@@ -36,9 +42,15 @@ public class DtailServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/detail.jsp");
             dispatcher.forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid postId format");
+            String error = "投稿IDの形式が不正です。";
+            request.setAttribute("error", error);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/detail.jsp");
+            dispatcher.forward(request, response);
         } catch (Exception e) {
-            throw new ServletException("Error retrieving post details", e);
+            String error = "投稿詳細の取得中にエラーが発生しました。";
+            request.setAttribute("error", error);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/detail.jsp");
+            dispatcher.forward(request, response);
         }
     }
 }
