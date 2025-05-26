@@ -12,6 +12,9 @@
         - updatedAt: DateTime
         - postTitle: String
         - postText: String
+        - userId: int
     }
+ 
+    User "1" --> "0..*" Post : make
 
 @enduml

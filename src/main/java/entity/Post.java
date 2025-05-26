@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import modelUtil.Failure;
 
 // 投稿情報を表すエンティティクラス
 public class Post {
@@ -26,9 +27,15 @@ public class Post {
      * @param postTitle タイトル（200文字以内）
      * @param postText  本文
      * @param userId    投稿者ユーザーID
+     * @throws Failure 制約違反時
      */
     public Post(int postId, LocalDateTime createdAt, LocalDateTime updatedAt,
-            String postTitle, String postText, int userId) {
+            String postTitle, String postText, int userId) throws modelUtil.Failure {
+        checkPostId(postId);
+        checkCreatedAt(createdAt);
+        checkPostTitle(postTitle);
+        checkPostText(postText);
+        checkUserId(userId);
         // 各フィールドに値をセット
         this.postId = postId;
         this.createdAt = createdAt;
@@ -74,12 +81,49 @@ public class Post {
     }
 
     // 投稿タイトルを設定
-    public void setPostTitle(String postTitle) {
+    public void setPostTitle(String postTitle) throws modelUtil.Failure {
+        checkPostTitle(postTitle);
         this.postTitle = postTitle;
     }
 
     // 投稿本文を設定
-    public void setPostText(String postText) {
+    public void setPostText(String postText) throws modelUtil.Failure {
+        checkPostText(postText);
         this.postText = postText;
+    }
+
+    // 投稿IDのバリデーション
+    private void checkPostId(int postId) throws modelUtil.Failure {
+        if (postId < 0) {
+            throw new modelUtil.Failure("投稿IDは正の整数でなければなりません。");
+        }
+    }
+
+    // 作成日時のバリデーション
+    private void checkCreatedAt(LocalDateTime createdAt) throws modelUtil.Failure {
+        if (createdAt == null) {
+            throw new modelUtil.Failure("作成日時は必須です。");
+        }
+    }
+
+    // 投稿タイトルのバリデーション
+    private void checkPostTitle(String postTitle) throws modelUtil.Failure {
+        if (postTitle == null || postTitle.isEmpty() || postTitle.length() > 200) {
+            throw new modelUtil.Failure("投稿タイトルは1文字以上200文字以下である必要があります。");
+        }
+    }
+
+    // 投稿本文のバリデーション
+    private void checkPostText(String postText) throws modelUtil.Failure {
+        if (postText == null || postText.isEmpty()) {
+            throw new modelUtil.Failure("投稿本文は必須です。");
+        }
+    }
+
+    // 投稿者ユーザーIDのバリデーション
+    private void checkUserId(int userId) throws modelUtil.Failure {
+        if (userId <= 0) {
+            throw new modelUtil.Failure("投稿者ユーザーIDは正の整数でなければなりません。");
+        }
     }
 }
