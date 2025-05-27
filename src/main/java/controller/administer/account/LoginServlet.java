@@ -12,10 +12,14 @@ import javax.servlet.http.HttpServletResponse; // HttpServletResponseのイン�
 public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // メッセージの取得
+        // messageとerrorの取得・セット
         String message = request.getParameter("message"); // リクエストパラメータから"message"を取得
         if (message != null && !message.isEmpty()) { // messageが存在し空でない場合
             request.setAttribute("message", message); // リクエスト属性に"message"をセット
+        }
+        String error = request.getParameter("error"); // リクエストパラメータから"error"を取得
+        if (error != null && !error.isEmpty()) { // errorが存在し空でない場合
+            request.setAttribute("error", error); // リクエスト属性に"error"をセット
         }
 
         // ログイン画面へのフォワード

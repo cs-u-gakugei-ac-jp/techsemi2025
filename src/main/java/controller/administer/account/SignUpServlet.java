@@ -12,6 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 public class SignUpServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/account/sign-up.jsp"); // サインアップ画面のJSPへのディスパッチャ取得
         dispatcher.forward(request, response); // JSPへフォワード
     }

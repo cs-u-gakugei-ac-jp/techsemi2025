@@ -19,6 +19,16 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
+
         try {
             PostsDao postsDao = new PostsDao(); // PostsDaoのインスタンス生成
             List<Post> posts = postsDao.getAll(); // 全投稿データを取得
@@ -29,13 +39,14 @@ public class HomeServlet extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("error", "投稿データの取得中にエラーが発生しました。: " + e.getMessage());
         }
-        String message = request.getParameter("message");
-        if (message != null && !message.isEmpty()) {
-            request.setAttribute("message", message);
+
+        String msg = request.getParameter("message");
+        if (msg != null && !msg.isEmpty()) {
+            request.setAttribute("message", msg);
         }
-        String error = request.getParameter("error");
-        if (error != null && !error.isEmpty()) {
-            request.setAttribute("error", error);
+        String err = request.getParameter("error");
+        if (err != null && !err.isEmpty()) {
+            request.setAttribute("error", err);
         }
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/reader/home.jsp");
         dispatcher.forward(request, response);

@@ -14,6 +14,16 @@ public class ExecuteLogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
+
         // セッションを取得し破棄
         HttpSession session = request.getSession(false); // 既存のセッションを取得（なければnull）
         if (session != null) {

@@ -26,6 +26,13 @@ public class ExecuteCreateServlet extends HttpServlet {
         String password = request.getParameter("password"); // パスワード取得
 
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+            // パスワードバリデーション
+            if (!isValidPassword(password)) {
+                String error = URLEncoder.encode("パスワードは8～32文字の半角英大文字・小文字・数字・記号をすべて含めてください。",
+                        StandardCharsets.UTF_8.toString());
+                response.sendRedirect(request.getContextPath() + "/administer/account/sign-up?error=" + error);
+                return;
+            }
             try {
                 // ハッシュ化されたパスワードを生成
                 String hashedPassword = hashPassword(password);
@@ -36,7 +43,7 @@ public class ExecuteCreateServlet extends HttpServlet {
                 usersDao.create(user); // DBにユーザー登録
 
                 // メッセージをエンコードしてリダイレクト
-                String message = URLEncoder.encode("アカウント登録が完了しました。", StandardCharsets.UTF_8.toString());
+                String message = URLEncoder.encode("アカウントの作成が完了しました。", StandardCharsets.UTF_8.toString());
                 response.sendRedirect(request.getContextPath() + "/administer/account/login?message=" + message); // ログイン画面へリダイレクト
             } catch (Failure | DaoException e) {
                 // 登録失敗時のエラー処理
@@ -46,7 +53,7 @@ public class ExecuteCreateServlet extends HttpServlet {
             }
         } else {
             // 入力値が不足している場合のエラー処理
-            String error = URLEncoder.encode("ユーザー名とパスワードを入力してください。", StandardCharsets.UTF_8.toString());
+            String error = URLEncoder.encode("ユーザー名とパaスワードを入力してください。", StandardCharsets.UTF_8.toString());
             response.sendRedirect(request.getContextPath() + "/administer/account/sign-up?error=" + error); // サインアップ画面へリダイレクト
         }
     }
@@ -68,5 +75,28 @@ public class ExecuteCreateServlet extends HttpServlet {
         } catch (NoSuchAlgorithmException e) {
             throw new Failure("パスワードのハッシュ化に失敗しました。", e); // ハッシュ化失敗時の例外
         }
+    }
+
+    // パスワードバリデーション（8～32文字、英大文字・小文字・数字・記号すべて含む）
+    private boolean isValidPassword(String password) {
+        if (password == null)
+            return false;
+        if (password.length() < 8 || password.length() > 32)
+            return false;
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasDigit = false;
+        boolean hasSymbol = false;
+        for (char c : password.toCharArray()) {
+            if (c >= 'A' && c <= 'Z')
+                hasUpper = true;
+            else if (c >= 'a' && c <= 'z')
+                hasLower = true;
+            else if (c >= '0' && c <= '9')
+                hasDigit = true;
+            else if (c >= 33 && c <= 126)
+                hasSymbol = true; // ASCII記号
+        }
+        return hasUpper && hasLower && hasDigit && hasSymbol;
     }
 }

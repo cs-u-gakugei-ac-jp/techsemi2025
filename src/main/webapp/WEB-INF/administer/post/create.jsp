@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ブログ記事の作成</title>
+    <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/administer/post/create.css">
 </head>
 <body>
+    <%@ include file="/WEB-INF/common/alert.jsp" %>
     <h1>ブログ記事の作成</h1>
     <form action="/administer/post/execute-create" method="post">
         <label for="title">タイトル</label>

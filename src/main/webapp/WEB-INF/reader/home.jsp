@@ -6,16 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiyaBlog</title>
+    <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/reader/home.css">
 </head>
 <body>
+    <%@ include file="/WEB-INF/common/alert.jsp" %>
     <h1>MiyaBlog</h1>
-    <c:if test="${not empty alertMessage}">
-        <div class="notification">
-            <p>${alertMessage}</p>
-        </div>
-    </c:if>
-    <p>最新のニュースとトレンドをお伝えします</p>
+    <p>最新の研究をお伝えします</p>
     <c:if test="${not empty posts}">
         <div class="posts">
             <c:forEach var="post" items="${posts}">

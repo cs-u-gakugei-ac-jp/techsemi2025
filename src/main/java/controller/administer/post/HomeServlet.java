@@ -20,9 +20,20 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
+
         HttpSession session = request.getSession(false); // セッションを取得（存在しない場合はnull）
         if (session == null || session.getAttribute("userId") == null) { // セッションまたはuserId属性がなければ
-            response.sendRedirect(request.getContextPath() + "/administer/account/login"); // ログイン画面へリダイレクト
+            String errorMessage = java.net.URLEncoder.encode("ログインしてください", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/administer/account/login?error=" + errorMessage); // ログイン画面へリダイレクト（エラー付き）
             return; // 以降の処理を中断
         }
 
@@ -36,10 +47,11 @@ public class HomeServlet extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException("投稿データの取得中にエラーが発生しました。", e); // 例外発生時はServletExceptionでラップしてスロー
         }
-        String message = request.getParameter("message"); // リクエストパラメータからmessageを取得
-        if (message != null && !message.isEmpty()) { // messageが存在し空でなければ
-            request.setAttribute("alertMessage", message); // alertMessage属性としてセット
+        String alertMessage = request.getParameter("message"); // リクエストパラメータからmessageを取得
+        if (alertMessage != null && !alertMessage.isEmpty()) { // messageが存在し空でなければ
+            request.setAttribute("alertMessage", alertMessage); // alertMessage属性としてセット
         }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/administer/post/home.jsp"); // JSPへのディスパッチャ取得
         dispatcher.forward(request, response); // JSPへフォワード
     }

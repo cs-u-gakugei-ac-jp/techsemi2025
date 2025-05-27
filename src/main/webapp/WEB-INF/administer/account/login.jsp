@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン</title>
+    <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/administer/account/login.css">
 </head>
 <body>
     <form action="/administer/account/execute-login" method="post">
         <h1>ログイン</h1>
-        <c:if test="${not empty message}">
-            <p class="message">${message}</p>
-        </c:if>
+        <%@ include file="/WEB-INF/common/alert.jsp" %>
         <label for="username">ユーザー名</label>
         <input type="text" id="username" name="username" placeholder="ユーザ名" required>
         <label for="password">パスワード</label>

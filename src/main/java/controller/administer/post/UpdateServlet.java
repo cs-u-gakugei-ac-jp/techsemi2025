@@ -18,9 +18,20 @@ public class UpdateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
+
         HttpSession session = request.getSession(false); // セッションを取得（なければnull）
         if (session == null || session.getAttribute("userId") == null) { // 未ログインの場合
-            response.sendRedirect(request.getContextPath() + "/administer/account/login"); // ログイン画面へリダイレクト
+            String errorMessage = java.net.URLEncoder.encode("ログインしてください", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/administer/account/login?error=" + errorMessage); // ログイン画面へリダイレクト（エラー付き）
             return;
         }
 
