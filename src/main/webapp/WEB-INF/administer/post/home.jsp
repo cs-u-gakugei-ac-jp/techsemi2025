@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiyaBlog</title>
+    <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/administer/post/home.css">
     <script>
         function confirmDelete(postId) {
@@ -23,12 +24,8 @@
 </head>
 <body>
     <h1>MiyaBlog</h1>
-    <c:if test="${not empty alertMessage}">
-        <div class="notification">
-            <p>${alertMessage}</p>
-        </div>
-    </c:if>
-    <p>最新のニュースとトレンドをお伝えします</p>
+    <%@ include file="/WEB-INF/common/alert.jsp" %>
+    <p>最新の研究をお伝えします</p>
     <button class="new-post" onclick="location.href='/administer/post/create'">新規作成画面</button>
     <button class="logout" onclick="confirmLogout()">ログアウト</button>
     <c:if test="${not empty posts}">

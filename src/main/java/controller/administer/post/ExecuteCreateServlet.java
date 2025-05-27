@@ -19,10 +19,20 @@ public class ExecuteCreateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // messageとerrorの取得・セット
+        String message = request.getParameter("message");
+        if (message != null && !message.isEmpty()) {
+            request.setAttribute("message", message);
+        }
+        String error = request.getParameter("error");
+        if (error != null && !error.isEmpty()) {
+            request.setAttribute("error", error);
+        }
 
         HttpSession session = request.getSession(false); // 既存のセッションを取得（なければnull）
         if (session == null || session.getAttribute("userId") == null) { // セッションまたはuserId属性がなければ
-            response.sendRedirect(request.getContextPath() + "/administer/account/login"); // ログイン画面へリダイレクト
+            String errorMessage = java.net.URLEncoder.encode("ログインしてください", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/administer/account/login?error=" + errorMessage); // ログイン画面へリダイレクト（エラー付き）
             return;
         }
 
@@ -34,8 +44,8 @@ public class ExecuteCreateServlet extends HttpServlet {
         try {
             post = new Post(0, LocalDateTime.now(), null, title, text, userId); // 新しい投稿オブジェクトを作成
         } catch (Failure e) {
-            String error = java.net.URLEncoder.encode("投稿オブジェクトの作成中にエラーが発生しました。", "UTF-8");
-            response.sendRedirect(request.getContextPath() + "/administer/post/home?error=" + error);
+            String errorMessage = java.net.URLEncoder.encode("投稿オブジェクトの作成中にエラーが発生しました。", "UTF-8");
+            response.sendRedirect(request.getContextPath() + "/administer/post/home?error=" + errorMessage); // エラーメッセージと共にリダイレクト
             return;
         }
         PostsDao postsDao = new PostsDao(); // PostsDaoのインスタンスを生成
@@ -46,8 +56,8 @@ public class ExecuteCreateServlet extends HttpServlet {
                     java.net.URLEncoder.encode("投稿の作成が完了しました。", "UTF-8")); // 成功メッセージと共にリダイレクト
             return;
         } catch (DaoException e) {
-            String error = java.net.URLEncoder.encode("投稿の作成中にエラーが発生しました。", "UTF-8"); // エラーメッセージをURLエンコード
-            response.sendRedirect(request.getContextPath() + "/administer/post/home?error=" + error); // エラーメッセージと共にリダイレクト
+            String errorMessage = java.net.URLEncoder.encode("投稿の作成中にエラーが発生しました。", "UTF-8"); // エラーメッセージをURLエンコード
+            response.sendRedirect(request.getContextPath() + "/administer/post/home?error=" + errorMessage); // エラーメッセージと共にリダイレクト
         }
     }
 }

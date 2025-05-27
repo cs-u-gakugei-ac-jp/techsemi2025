@@ -6,9 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>投稿詳細</title>
+    <link rel="stylesheet" href="/css/common/alert.css">
     <link rel="stylesheet" href="/css/reader/detail.css">
 </head>
 <body>
+    <%@ include file="/WEB-INF/common/alert.jsp" %>
     <h1>投稿詳細</h1>
     <c:if test="${not empty post}">
         <div class="post-detail">
