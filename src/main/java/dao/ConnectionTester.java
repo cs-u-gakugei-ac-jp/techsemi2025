@@ -6,7 +6,7 @@ import java.sql.*;
 public class ConnectionTester {
 
     // 接続用の情報をフィールドに定数として定義
-    public static String RDB_DRIVE = "org.mariadb.jdbc.Driver";
+    public static String RDB_DRIVE = "com.mysql.cj.jdbc.Driver";
     public static String URL = "jdbc:mysql://db:3306/miyablog_db?characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Tokyo&rewriteBatchedStatements=true";
     public static String USER = "root";
     public static String PASSWD = "root";
