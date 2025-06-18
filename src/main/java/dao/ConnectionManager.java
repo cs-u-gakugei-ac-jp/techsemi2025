@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class ConnectionManager {
     // MariaDB用ドライバ名
-    private static final String RDB_DRIVE = "org.mariadb.jdbc.Driver";
+    private static final String RDB_DRIVE = "com.mysql.cj.jdbc.Driver";
     // DB接続URL
     private static final String URL = "jdbc:mysql://db:3306/miyablog_db?characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Tokyo&rewriteBatchedStatements=true";
     // DBユーザー名
@@ -20,8 +20,6 @@ public class ConnectionManager {
         try {
             // MySQL用ドライバを明示的にロード
             Class.forName("com.mysql.cj.jdbc.Driver");
-            // MariaDB用ドライバもロード（必要なら）
-            Class.forName(RDB_DRIVE);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("JDBCドライバのロードに失敗しました", e);
         }
